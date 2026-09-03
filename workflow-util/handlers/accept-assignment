@@ -336,6 +336,7 @@ do
     # Check if we're outside release window.
     now_seconds_since_epoch=$(date +%s)
     if [[ "$release_at_iso_8601" != "" ]]
+    then
         # Release window has start. Check if we're before start.
         release_at_seconds_since_epoch=$(date -d "$release_at_iso_8601" +%s)
         if [[ "$now_seconds_since_epoch" -lt "$release_at_seconds_since_epoch" ]]
