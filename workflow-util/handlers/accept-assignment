@@ -387,7 +387,7 @@ done
 
 # If unsuccessful in finding configuration that allows assignment acceptance,
 # report error and terminate
-if [[ "$found_matching_config" == "1" ]]
+if [[ "$found_matching_config" == "0" ]]
 then
     echo "Error: Failed to accept assignment\"$ASSIGNMENT_NAME\". Perhaps accept key \"$ASSIGNMENT_ACCEPT_KEY\" is invalid, or we're outside release window(s)." >&2
     echo -n '{"status": "denied"}' > result/status.json # TODO handle in web frontend
