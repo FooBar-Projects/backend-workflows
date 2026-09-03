@@ -260,7 +260,7 @@ do
         fi
 
         # Section has name. Not a pseudosection.
-        section_data=$(echo "$all_section_data" | jq '.[] | select(.name == "'"$section_name"'")' | jq -s 'if (length > 0) then .[0] else {}')
+        section_data=$(echo "$all_section_data" | jq '.[] | select(.name == "'"$section_name"'")' | jq -s 'if (length > 0) then .[0] else {} end')
         
         # Get section weekday and start time
         section_weekday=$(echo "$section_data" | jq -j 'if (.weekday != null) then .weekday else "" end')
@@ -313,7 +313,7 @@ do
         else
             # Section name present. Not a pseudosection. Assignment unreleases
             # for student at section end time.
-            section_data=$(echo "$all_section_data" | jq '.[] | select(.name == "'"$section_name"'")' | jq -s 'if (length > 0) then .[0] else {}')
+            section_data=$(echo "$all_section_data" | jq '.[] | select(.name == "'"$section_name"'")' | jq -s 'if (length > 0) then .[0] else {} end')
             
             # Get section weekday and end time
             section_weekday=$(echo "$section_data" | jq -j 'if (.weekday != null) then .weekday else "" end')
