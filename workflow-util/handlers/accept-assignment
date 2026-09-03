@@ -243,7 +243,12 @@ do
     fi
 
     # Compute start of release window
-    release_at_iso_8601="${assignment_release_at}${timezone_utc_offset}"
+    release_at_iso_8601=""
+    if [[ "$assignment_release_at" != "" ]]
+    then
+        release_at_iso_8601="${assignment_release_at}${timezone_utc_offset}"
+    fi
+
     if [[ "$assignment_release_at_section_start" == "true" ]]
     then
         # Must shift release_at forward to section's next start time. Get
@@ -299,7 +304,12 @@ do
     fi
 
     # Compute end of release window similarly
-    unrelease_at_iso_8601="${assignment_unrelease_at}${timezone_utc_offset}"
+    unrelease_at_iso_8601=""
+    if [[ "$assignment_unrelease_at" != "" ]]
+    then
+        unrelease_at_iso_8601="${assignment_unrelease_at}${timezone_utc_offset}"
+    fi
+
     if [[ "$assignment_unrelease_at_section_end" == "true" ]]
     then
         # Must shift unrelease_at forward to section's next end time. Get
@@ -393,7 +403,7 @@ done
 if [[ "$found_matching_config" == "0" ]]
 then
     echo "Error: Failed to accept assignment\"$ASSIGNMENT_NAME\". Perhaps accept key \"$ASSIGNMENT_ACCEPT_KEY\" is invalid, or we're outside release window(s)." >&2
-    echo -n '{"status": "denied"}' > result/status.json # TODO handle in web frontend
+    echo -n '{"status": "denied"}' > result/status.json
     exit 0
 fi
 
