@@ -277,7 +277,7 @@ do
             # forward to next instance of section weekday, then set time to
             # section start time
             shift_amount=$(((section_weekday_number + 7 - release_at_weekday_number) % 7))
-            shifted_release_at_day=$(date -d "${release_at_day} + ${shift_amount} days" +%Y-%d-%m)
+            shifted_release_at_day=$(date -d "${release_at_day} + ${shift_amount} days" +%Y-%m-%d)
             release_at_iso_8601="${shifted_release_at_day}T${section_start_time}${timezone_utc_offset}"
         else
             # Release-at weekday is same as section weekday. Check if
@@ -292,7 +292,7 @@ do
             else
                 # Releases later in day than section start time. Shift
                 # forward by one week and to section start time.
-                shifted_release_at_day=$(date -d "${release_at_day} + 1 week" +%Y-%d-%m)
+                shifted_release_at_day=$(date -d "${release_at_day} + 1 week" +%Y-%m-%d)
                 release_at_iso_8601="${shifted_release_at_day}T${section_start_time}${timezone_utc_offset}"
             fi
         fi
@@ -330,7 +330,7 @@ do
                 # forward to next instance of section weekday, then set time to
                 # section end time
                 shift_amount=$(((section_weekday_number + 7 - unrelease_at_weekday_number) % 7))
-                shifted_unrelease_at_day=$(date -d "${unrelease_at_day} + ${shift_amount} days" +%Y-%d-%m)
+                shifted_unrelease_at_day=$(date -d "${unrelease_at_day} + ${shift_amount} days" +%Y-%m-%d)
                 unrelease_at_iso_8601="${shifted_unrelease_at_day}T${section_end_time}${timezone_utc_offset}"
             else
                 # Unrelease-at weekday is same as section weekday. Check if
@@ -345,7 +345,7 @@ do
                 else
                     # Unreleases later in day than section end time. Shift
                     # forward by one week and to section end time.
-                    shifted_unrelease_at_day=$(date -d "${unrelease_at_day} + 1 week" +%Y-%d-%m)
+                    shifted_unrelease_at_day=$(date -d "${unrelease_at_day} + 1 week" +%Y-%m-%d)
                     unrelease_at_iso_8601="${shifted_unrelease_at_day}T${section_end_time}${timezone_utc_offset}"
                 fi
             fi
