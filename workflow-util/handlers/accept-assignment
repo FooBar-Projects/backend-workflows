@@ -352,6 +352,9 @@ do
         fi
     fi
 
+    echo "Release at: $release_at_iso_8601" # TODO
+    echo "Unrelease at: $unrelease_at_iso_8601" # TODO
+
     # Check if we're outside release window.
     now_seconds_since_epoch=$(date +%s)
     if [[ "$release_at_iso_8601" != "" ]]
