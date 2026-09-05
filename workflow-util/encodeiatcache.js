@@ -52,7 +52,7 @@ async function main() {
 
     const encryptedIatStructure = {
         'encryptedIat': encryptedIatBuffer.toBase64(),
-        'iv': iv.toBasae64().
+        'iv': iv.toBase64()
     };
     const encryptedIatStructureJson = JSON.stringify(encryptedIatStructure);
 
