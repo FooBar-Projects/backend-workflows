@@ -3,6 +3,8 @@ import { writeFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { join } from 'node:path';
 
+import { encryptAES } from './util.js'
+
 async function main() {
     const config = {
       options: {
