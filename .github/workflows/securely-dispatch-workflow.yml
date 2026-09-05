@@ -1,12 +1,13 @@
 name: Securely dispatch workflow by opening issue
 
 on:
-  workflow_run:
-    workflows: ["Issue Opened Trigger"]
-    types: [completed]
+  issues:
+    types:
+      - opened
 
 jobs:
   securely-dispatch-workflow:
+    if: startsWith(github.event.issue.title, '[securely-dispatch-workflow]')
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -27,6 +28,8 @@ jobs:
       CLASSROOMS_APP_PRIVATE_KEY: ${{ secrets.CLASSROOMS_APP_PRIVATE_KEY }}
       CLASSROOM_RSA_PRIVATE_KEY: ${{ secrets.CLASSROOM_RSA_PRIVATE_KEY }}
       GITHUB_REPOSITORY: ${{ github.repository }}
+      GITHUB_EVENT_ISSUE_BODY: ${{ github.event.issue.body }}
+      GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CACHE_AES_KEY: ${{ secrets.CACHE_AES_KEY }}
     permissions:
@@ -34,13 +37,6 @@ jobs:
       issues: write
       actions: write
     steps:
-      - name: Get issue number and body from triggering on-issue-opened workflow 
-        uses: actions/download-artifact@v4
-        with:
-          name: issue-info 
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -52,11 +48,14 @@ jobs:
           npm i
 
       - name: Get cached app installation access tokens
-        id: cache-access-tokens
-        uses: actions/cache@v6
+        uses: dawidd6/action-download-artifact@v9
+        continue-on-error: true
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: securely-dispatch-workflow.yml
+          name: cached-app-access-tokens
+          branch: main
           path: cached-app-access-tokens/
-          key: cached-app-access-tokens
 
       - name: Securely dispatch workflow
         run: |
@@ -79,10 +78,6 @@ jobs:
           
           # TODO more defaults for env vars, and error-handle for missing
           # required vars / secrets
-
-          # Extract github issue number and body from downloaded artifact
-          GITHUB_EVENT_ISSUE_NUMBER=$(cat issue-info.json | jq -j '.issue_number')
-          GITHUB_EVENT_ISSUE_BODY=$(cat issue-info.json | jq -j '.issue_body')
           
           # Use node script to decode issue body and decrypt via
           # CLASSROOM_RSA_PRIVATE_KEY
@@ -121,11 +116,11 @@ jobs:
           # not expired
           if [[ -f "cached-app-access-tokens/assignment-creation-app-installation-access-token.json" ]]
           then
-            assignment_creation_app_installation_access_token=$(node repo/workflow-util/decodeiatcache.js -f "cached-app-access-tokens/assignment-creation-app-installation-access-token.json")
+            export assignment_creation_app_installation_access_token=$(node repo/workflow-util/decodeiatcache.js -f "cached-app-access-tokens/assignment-creation-app-installation-access-token.json")
           fi
           if [[ -f "cached-app-access-tokens/classrooms-app-installation-access-token.json" ]]
           then
-            classrooms_app_installation_access_token=$(node repo/workflow-util/decodeiatcache.js -f "cached-app-access-tokens/classrooms-app-installation-access-token.json")
+            export classrooms_app_installation_access_token=$(node repo/workflow-util/decodeiatcache.js -f "cached-app-access-tokens/classrooms-app-installation-access-token.json")
           fi
           
           # Prepare result directory
@@ -200,3 +195,10 @@ jobs:
           name: result
           path: result/
           retention-days: 1
+
+      - name: Upload installation access tokens as cache artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cached-app-access-tokens
+          path: cached-app-access-tokens/
+          if-no-files-found: ignore
