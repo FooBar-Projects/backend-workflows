@@ -1,3 +1,4 @@
+import { webcrypto } from 'crypto';
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { join } from 'node:path';
