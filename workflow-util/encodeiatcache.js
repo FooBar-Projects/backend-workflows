@@ -1,5 +1,7 @@
 import { webcrypto } from 'crypto';
 import { writeFile } from 'node:fs/promises';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { join } from 'node:path';
 
@@ -59,6 +61,8 @@ async function main() {
     };
     const encryptedIatStructureJson = JSON.stringify(encryptedIatStructure);
 
+    const parentDir = path.dirname(values.file);
+    await fs.mkdir(parentDir, { recursive: true });
     await writeFile(values.file, encryptedIatStructureJson, 'utf8');
 }
 
