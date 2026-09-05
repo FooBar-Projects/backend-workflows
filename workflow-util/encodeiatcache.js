@@ -50,8 +50,8 @@ async function main() {
     const iatPayloadBuffer = (new TextEncoder('utf-8')).encode(iatPayloadJson);
 
     const encryptionResult = encryptAES(iatPayloadBuffer, cacheAESKey);
-    const encryptedIatBuffer = encryptionResult.ciphertext;
-    const iv = encryptionResult.iv;
+    const encryptedIatBuffer = encryptionResult['ciphertext'];
+    const iv = encryptionResult['iv'];
 
     const encryptedIatStructure = {
         'encryptedIat': encryptedIatBuffer.toBase64(),
