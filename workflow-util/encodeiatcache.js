@@ -54,8 +54,8 @@ async function main() {
     const iv = encryptionResult['iv'];
 
     const encryptedIatStructure = {
-        'encryptedIat': encryptedIatBuffer.toBase64(),
-        'iv': iv.toBase64()
+        'encryptedIat': Buffer.from(encryptedIatBuffer).toString('base64'),
+        'iv': Buffer.from(iv).toString('base64')
     };
     const encryptedIatStructureJson = JSON.stringify(encryptedIatStructure);
 
