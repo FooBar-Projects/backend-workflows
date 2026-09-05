@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { join } from 'node:path';
 
-import { encryptAES } from './util.js'
+import { decryptAES } from './util.js'
 
 async function main() {
     const config = {

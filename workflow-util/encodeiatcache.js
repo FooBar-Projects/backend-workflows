@@ -49,7 +49,7 @@ async function main() {
     const iatPayloadJson = JSON.stringify(iatPayload);
     const iatPayloadBuffer = (new TextEncoder('utf-8')).encode(iatPayloadJson);
 
-    const encryptionResult = encryptAES(iatPayloadBuffer, cacheAESKey);
+    const encryptionResult = await encryptAES(iatPayloadBuffer, cacheAESKey);
     const encryptedIatBuffer = encryptionResult['ciphertext'];
     const iv = encryptionResult['iv'];
 
