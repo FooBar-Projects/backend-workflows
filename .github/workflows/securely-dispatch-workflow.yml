@@ -31,6 +31,7 @@ jobs:
       GITHUB_EVENT_ISSUE_BODY: ${{ github.event.issue.body }}
       GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CACHE_AES_KEY: ${{ secrets.CACHE_AES_KEY }}
     permissions:
       contents: read
       issues: write
